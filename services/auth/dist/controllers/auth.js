@@ -1,62 +1,36 @@
 import User from "../model/User.js";
 import jwt from "jsonwebtoken";
+import { oauth2client } from "../config/googleConfig.js";
+import axios from "axios";
 import TryCatch from "../middlewares/trycatch.js";
 export const loginUser = TryCatch(async (req, res) => {
-    try {
-        const { email, name, picture } = req.body;
-        let user = await User.findOne({ email }); // use let coz we can update the user
-        if (!user) {
-            user = await User.create({
-                name,
-                email,
-                image: picture,
-            });
-        }
-        const token = jwt.sign({ user }, process.env.JWT_SEC, {
-            expiresIn: "15d",
-        });
-        res.status(200).json({
-            message: "Logged Success",
-            token,
-            user,
+    const { code } = req.body; // when we login in frontend
+    if (!code) {
+        return res.status(400).json({
+            message: "Authorization code is required",
         });
     }
-    catch (error) {
-        res.status(500).json({
-            message: error.message,
+    const googleRes = await oauth2client.getToken(code);
+    oauth2client.setCredentials(googleRes.tokens);
+    const userRes = await axios.get(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`);
+    const { email, name, picture } = userRes.data;
+    let user = await User.findOne({ email });
+    if (!user) {
+        user = await User.create({
+            name,
+            email,
+            image: picture,
         });
     }
+    const token = jwt.sign({ user }, process.env.JWT_SEC, {
+        expiresIn: "15d",
+    });
+    res.status(200).json({
+        message: "Logged Success",
+        token,
+        user,
+    });
 });
-// export const loginUser = TryCatch(async (req, res) => {
-//   const { code } = req.body;
-//   if (!code) {
-//     return res.status(400).json({
-//       message: "Authorization code is required",
-//     });
-//   }
-//   const googleRes = await oauth2client.getToken(code);
-//   oauth2client.setCredentials(googleRes.tokens);
-//   const userRes = await axios.get(
-//     `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
-//   );
-//   const { email, name, picture } = userRes.data;
-//   let user = await User.findOne({ email });
-//   if (!user) {
-//     user = await User.create({
-//       name,
-//       email,
-//       image: picture,
-//     });
-//   }
-//   const token = jwt.sign({ user }, process.env.JWT_SEC as string, {
-//     expiresIn: "15d",
-//   });
-//   res.status(200).json({
-//     message: "Logged Success",
-//     token,
-//     user,
-//   });
-// });
 const allowedRoles = ["customer", "rider", "seller"];
 export const addUserRole = TryCatch(async (req, res) => {
     if (!req.user?._id) {
