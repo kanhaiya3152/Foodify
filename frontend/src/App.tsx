@@ -1,11 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-// import ProtectedRoute from "./components/protectedRote";
-// import PublicRoute from "./components/publicRoute";
+import ProtectedRoute from "./components/protectedRoute";
+import PublicRoute from "./components/publicRoute";
+import SelectRole from "./pages/selectRole";
+import Navbar from "./components/navbar";
 // import SelectRole from "./pages/SelectRole";
 // import Navbar from "./components/navbar";
-// import Account from "./pages/Account";
+import Account from "./pages/Account";
 // import { useAppData } from "./context/AppContext";
 // import Restaurant from "./pages/Restaurant";
 // import RestaurantPage from "./pages/RestaurantPage";
@@ -43,12 +45,12 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
-        {/* <Navbar /> */}
+        <Navbar />
         <Routes>
-          {/* <Route element={<PublicRoute />}> */}
+          <Route element={<PublicRoute />}>
             <Route path="/login" element={<Login />} />
-          {/* </Route> */}
-          {/* <Route element={<ProtectedRoute />}> */}
+          </Route>
+          <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Home />} />
             {/* <Route
               path="/paymentsuccess/:paymentId"
@@ -60,11 +62,11 @@ const App = () => {
             <Route path="/address" element={<AddAddressPage />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/restaurant/:id" element={<RestaurantPage />} />
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/cart" element={<Cart />} /> */}
             <Route path="/select-role" element={<SelectRole />} />
-            <Route path="/account" element={<Account />} /> */}
-          {/* </Route>*/}
-        </Routes> 
+            <Route path="/account" element={<Account />} />
+          </Route>
+        </Routes>
       </BrowserRouter>
     </>
   );
