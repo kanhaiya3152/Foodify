@@ -4,7 +4,7 @@ const connectDB = async () => {
         await mongoose.connect(process.env.MONGO_URI, {
             dbName: "foodify",
         });
-        console.log("connected to DB");
+        console.log("connected to MongoDB");
     }
     catch (error) {
         console.log(error);
