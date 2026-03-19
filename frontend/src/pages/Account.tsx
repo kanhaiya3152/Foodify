@@ -15,18 +15,18 @@ const Account = () => {
     setUser(null);
     setIsAuth(false);
     navigate("/login");
-    toast.success("logout Success");
+    toast.success("Logout Successfully");
   };
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-6">
       <div className="mx-auto max-w-md rounded-lg bg-white shadow-sm">
         <div className="flex items-center gap-4 border-b p-5">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-red-500 text-xl font-semibold text-white">
-            {firstLetter} K
+            {firstLetter}
           </div>
           <div>
-            <h2 className="text-lg font-semibold">{user?.name}Karan</h2>
-            <p className="text-sm text-gray-500">{user?.email} Kanhaiya@gmail.com</p>
+            <h2 className="text-lg font-semibold">{user?.name}</h2>
+            <p className="text-sm text-gray-500">{user?.email}</p>
           </div>
         </div>
         <div className="divide-y">
