@@ -8,8 +8,8 @@ import Navbar from "./components/navbar";
 // import SelectRole from "./pages/SelectRole";
 // import Navbar from "./components/navbar";
 import Account from "./pages/Account";
-// import { useAppData } from "./context/AppContext";
-// import Restaurant from "./pages/Restaurant";
+import Restaurant from "./pages/restaurant";
+import { useAppData } from "./context/AppContext";
 // import RestaurantPage from "./pages/RestaurantPage";
 // import Cart from "./pages/Cart";
 // import AddAddressPage from "./pages/Address";
@@ -22,7 +22,7 @@ import Account from "./pages/Account";
 // import Admin from "./pages/Admin";
 
 const App = () => {
-  // const { user, loading } = useAppData();
+  const { user, loading } = useAppData();
 
   // if (loading) {
   //   return (
@@ -32,9 +32,9 @@ const App = () => {
   //   );
   // }
 
-  // if (user && user.role === "seller") {
-  //   return <Restaurant />;
-  // }
+  if (user && user.role === "seller") {
+    return <Restaurant />;
+  }
   // if (user && user.role === "rider") {
   //   return <RiderDashboard />;
   // }
