@@ -13,7 +13,7 @@ const Login = () => {
 
   const { setUser, setIsAuth } = useAppData();
 
-  const responseGoogle = async (authResult: any) => {
+  const responseGoogle = async (authResult:any) => {
     setLoading(true);
     try {
       const result = await axios.post(`${authService}/api/auth/login`, {
