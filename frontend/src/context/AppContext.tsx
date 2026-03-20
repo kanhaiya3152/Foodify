@@ -7,7 +7,6 @@ import {
   type ReactNode,
 } from "react";
 import { authService } from "../main";
-// import type { AppContextType, ICart, LocationData, User } from "../types";
 import { Toaster } from "react-hot-toast";
 import type { AppContextType, LocationData, User } from "../types";
 
@@ -109,6 +108,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
           longitude,
           formattedAddress: "Current Location",
         });
+        console.log(error);
         setCity("Faild to load");
         setLoadingLocation(false);
       }
@@ -140,7 +140,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   );
 };
 
-// func is use all these above thing into another pages
+// This func is helps to use the all of these above thing into another pages
 export const useAppData = (): AppContextType => {
   const context = useContext(AppContext);
   if (!context) {
