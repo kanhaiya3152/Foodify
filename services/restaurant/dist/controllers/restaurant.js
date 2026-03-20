@@ -82,6 +82,7 @@ export const fetchMyRestaurant = TryCatch(async (req, res) => {
     }
     res.json({ restaurant });
 });
+// this for updating(editing) the status of restuarant means open or closed
 export const updateStatusRestaurant = TryCatch(async (req, res) => {
     if (!req.user) {
         return res.status(403).json({
@@ -107,6 +108,7 @@ export const updateStatusRestaurant = TryCatch(async (req, res) => {
         restaurant,
     });
 });
+// this for updating(editing) the name, description of restuarant
 export const updateRestaurant = TryCatch(async (req, res) => {
     if (!req.user) {
         return res.status(403).json({
@@ -121,7 +123,7 @@ export const updateRestaurant = TryCatch(async (req, res) => {
         });
     }
     res.json({
-        message: "Restaurant Updated",
+        message: "Restaurant has been Updated",
         restaurant,
     });
 });
