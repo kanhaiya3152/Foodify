@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { IRestaurant } from "../types";
 import axios from "axios";
 import { restaurantService } from "../main";
-// import RestaurantCard from "../components/RestaurantCard";
+import { RestaurantCard } from "../components/RestaurantCard";
 
 const Home = () => {
   const { location } = useAppData();
