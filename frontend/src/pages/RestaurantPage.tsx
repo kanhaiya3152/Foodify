@@ -3,6 +3,8 @@ import type { IMenuItem, IRestaurant } from "../types";
 import axios from "axios";
 import { restaurantService } from "../main";
 import { useEffect, useState } from "react";
+import RestaurantProfile from "../components/RestaurantProfile";
+import MenuItems from "../components/MenuItems";
 
 export const RestaurantPage = () => {
   const { id } = useParams();
@@ -61,7 +63,30 @@ export const RestaurantPage = () => {
       </div>
     );
   }
-  return <div>RestaurantPage</div>;
+  if (!restaurant) {
+    return (
+      <div className="flex h-[60vh] items-center justify-center">
+        <p className="text-gray-500">No restaurant found</p>
+      </div>
+    );
+  }
+  return (
+    <div className="min-h-screen bg-gray-50 px-4 py-6 space-y-6">
+      <RestaurantProfile
+        restaurant={restaurant}
+        onUpdate={setRestaurant}
+        isSeller={false}
+      />
+
+      <div className="rounded-xl bg-white shadow-sm p-4">
+        <MenuItems
+          isSeller={false}
+          items={menuItems}
+          onItemDeleted={() => {}}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default RestaurantPage;

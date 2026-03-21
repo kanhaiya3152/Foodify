@@ -63,8 +63,8 @@ export interface IMenuItem {
 export interface ICart {
   _id: string;
   userId: string;
-  restaurantId: string | IRestaurant;
-  itemId: string | IMenuItem;
+  restaurantId: string | IRestaurant; // coz we populate it in controller in fetchmycart func
+  itemId: string | IMenuItem; // coz we populate it in controller in fetchmycart func
   quauntity: number;
   cretedAt: Date;
   updatedAt: Date;
