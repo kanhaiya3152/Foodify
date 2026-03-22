@@ -5,7 +5,6 @@ import type { ICart, IMenuItem, IRestaurant } from "../types";
 import axios from "axios";
 import { restaurantService } from "../main";
 import toast from "react-hot-toast";
-import { VscLoading } from "react-icons/vsc";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { TbTrash } from "react-icons/tb";
 
@@ -75,7 +74,7 @@ const Cart = () => {
   };
 
   const clearCart = async () => {
-    const confirm = window.confirm("Are you sure you want to clear you cart?");
+    const confirm = window.confirm("Are you sure! Want to clear your cart?");
     if (!confirm) return;
     try {
       setClearingCart(true);
