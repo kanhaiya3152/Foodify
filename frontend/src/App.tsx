@@ -11,7 +11,7 @@ import SelectRole from "./pages/SelectRole";
 import Restaurant from "./pages/Restaurant";
 import Cart from "./pages/Cart";
 import AddAddressPage from "./pages/Address";
-import { Checkout } from "./pages/Checkout";
+import Checkout from "./pages/Checkout";
 // import Checkout from "./pages/Checkout";
 // import PaymentSuccess from "./pages/PaymentSuccess";
 // import OrderSuccess from "./pages/OrderSuccess";
