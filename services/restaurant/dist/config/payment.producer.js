@@ -1,3 +1,4 @@
+import axios from "axios";
 import Order from "../models/Order.js";
 import { getChannel } from "./rabbitmq.js";
 export const startPaymentConsumer = async () => {
@@ -14,7 +15,7 @@ export const startPaymentConsumer = async () => {
             const { orderId } = event.data;
             const order = await Order.findByIdAndUpdate({
                 _id: orderId,
-                paymentStatus: { $ne: "paid" }
+                paymentStatus: { $ne: "paid" },
             }, {
                 $set: {
                     paymentStatus: "paid",
@@ -22,7 +23,7 @@ export const startPaymentConsumer = async () => {
                 },
                 $unset: {
                     expiresAt: 1,
-                }
+                },
             }, { new: true });
             if (!order) {
                 channel.ack(msg);
@@ -30,6 +31,18 @@ export const startPaymentConsumer = async () => {
             }
             console.log("✅Order Placed", order._id);
             // socket ka kam
+            await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
+                event: "order:new",
+                room: `restaurant:${order.restaurantId}`,
+                payload: {
+                    orderId: order._id,
+                    status: order.status,
+                },
+            }, {
+                headers: {
+                    "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
+                },
+            });
             channel.ack(msg);
         }
         catch (error) {
