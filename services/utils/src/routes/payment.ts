@@ -1,16 +1,12 @@
-// import express from "express";
-// import {
-//   createRazorpayOrder,
-//   payWithStripe,
-//   verifyRazorpayPayment,
-//   verifyStripe,
-// } from "../controllers/payment.js";
+import express from "express";
+import {
+  createRazorpayOrder,
+  verifyRazorpayPayment,
+} from "../controllers/payment.js";
 
-// const router = express.Router();
+const router = express.Router();
 
-// router.post("/create", createRazorpayOrder);
-// router.post("/verify", verifyRazorpayPayment);
-// router.post("/stripe/create", payWithStripe);
-// router.post("/stripe/verify", verifyStripe);
+router.post("/create", createRazorpayOrder);
+router.post("/verify", verifyRazorpayPayment);
 
-// export default router;
+export default router;
