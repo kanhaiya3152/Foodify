@@ -1,15 +1,11 @@
 "use strict";
-// import express from "express";
-// import {
-//   createRazorpayOrder,
-//   payWithStripe,
-//   verifyRazorpayPayment,
-//   verifyStripe,
-// } from "../controllers/payment.js";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-// const router = express.Router();
-// router.post("/create", createRazorpayOrder);
-// router.post("/verify", verifyRazorpayPayment);
-// router.post("/stripe/create", payWithStripe);
-// router.post("/stripe/verify", verifyStripe);
-// export default router;
+const express_1 = __importDefault(require("express"));
+const payment_js_1 = require("../controllers/payment.js");
+const router = express_1.default.Router();
+router.post("/create", payment_js_1.createRazorpayOrder);
+router.post("/verify", payment_js_1.verifyRazorpayPayment);
+exports.default = router;
