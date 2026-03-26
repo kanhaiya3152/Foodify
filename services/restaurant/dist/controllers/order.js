@@ -204,7 +204,8 @@ export const updateOrderStatus = TryCatch(async (req, res) => {
     }
     order.status = status;
     await order.save();
-    await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, {
+    await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`, // from this call , user can also see the updates simultaneously when rider or restuarant update
+    {
         event: "order:update",
         room: `user:${order.userId}`,
         payload: {

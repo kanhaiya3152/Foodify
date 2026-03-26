@@ -5,24 +5,24 @@ export const initSocket = (server) => {
     io = new Server(server, {
         cors: {
             origin: "*",
-        }
+        },
     });
     io.use((socket, next) => {
         try {
             const token = socket.handshake.auth?.token;
             if (!token) {
-                return next(new Error("Unauthorised"));
+                return next(new Error("Unauthorized"));
             }
             const decoded = jwt.verify(token, process.env.JWT_SEC);
             if (!decoded || !decoded.user) {
-                return next(new Error("Unauthorised"));
+                return next(new Error("Unauthorized"));
             }
             socket.data.user = decoded.user;
             next();
         }
         catch (error) {
-            console.log("Socket auth failed", error);
-            next(new Error("Unauthorised"));
+            console.log("❌ Socket auth failed: ", error);
+            next(new Error("Unauthorized"));
         }
     });
     io.on("connection", (socket) => {
@@ -32,21 +32,21 @@ export const initSocket = (server) => {
             return;
         }
         const userId = user._id;
-        socket.join(`user: ${userId}`);
+        socket.join(`user:${userId}`);
         if (user.restaurantId) {
-            socket.join(`restaurant: ${user.restaurantId}`);
+            socket.join(`restaurant:${user.restaurantId}`);
         }
-        console.log(`user connected: ${userId}`);
+        console.log(`User connected: ${userId}`);
         console.log("Socket room: ", [...socket.rooms]);
-        socket.on("disconnected", () => {
-            console.log(`user disconnected: ${userId}`);
+        socket.on("disconnect", () => {
+            console.log(`User disconnected:${userId}`);
         });
-        return io;
     });
+    return io;
 };
 export const getIO = () => {
     if (!io) {
-        throw new Error("Socket.io not available");
+        throw new Error("Socket.io not initialized");
     }
     return io;
 };
