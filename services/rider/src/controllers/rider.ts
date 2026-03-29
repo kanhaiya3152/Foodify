@@ -186,7 +186,7 @@ export const acceptOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
   const rider = await Rider.findOne({ userId: riderUserId, isAvailble: true });
 
   if (!rider) {
-    return res.status(404).json({ message: "rider not found" });
+    return res.status(404).json({ message: "Rider not found" });
   }
 
   try {
