@@ -1,0 +1,17 @@
+import ampq from "amqplib"; // this helps us to connect with rabbitmq
+
+let channel: ampq.Channel;
+
+export const connectRabbitMQ = async() => {
+    const connection =await ampq.connect(process.env.RABBITMQ_URL!);
+
+    channel = await connection.createChannel();
+
+    await channel.assertQueue(process.env.RIDER_QUEUE!,{
+        durable:true,
+    })
+
+    console.log("🐇 connected to RabbitMQ! [Rider service]");
+}
+
+export const getChannel = () => channel;
