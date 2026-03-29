@@ -45,7 +45,7 @@ export const startOrderReadyConsumer = async() => {
 
             for(const rider of riders){
                 try {
-                    await axios.post(`${process.env.REALTIME_SERVICE}/api/internal/emit`,{
+                    await axios.post(`${process.env.REALTIME_SERVICE}/api/v1/internal/emit`,{
                         event: "order:available",
                         room: `user:${rider.userId}`,
                         payload: {orderId, restaurantId},
