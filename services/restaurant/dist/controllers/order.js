@@ -4,6 +4,7 @@ import Address from "../models/Address.js";
 import Cart from "../models/Cart.js";
 import Order from "../models/Order.js";
 import Restaurant from "../models/Restaurant.js";
+import { publishEvent } from "../config/order.publisher.js";
 // import { publishEvent } from "../config/order.publisher.js";
 export const createOrder = TryCatch(async (req, res) => {
     const user = req.user;
@@ -220,11 +221,11 @@ export const updateOrderStatus = TryCatch(async (req, res) => {
     // now assign riders
     if (status === "ready_for_rider") {
         console.log("Publishing Order ready for rider event for order", order._id);
-        //   await publishEvent("ORDER_READY_FOR_RIDER", {
-        //     orderId: order._id.toString(),
-        //     restaurantId: restaurant._id.toString(),
-        //     location: restaurant.autoLocation,
-        //   });
+        await publishEvent("ORDER_READY_FOR_RIDER", {
+            orderId: order._id.toString(),
+            restaurantId: restaurant._id.toString(),
+            location: restaurant.autoLocation,
+        });
         console.log("Event Published successfully");
     }
     res.json({
@@ -263,6 +264,7 @@ export const fetchSingleOrder = TryCatch(async (req, res) => {
     }
     res.json(order);
 });
+// this is internal api call from rider service
 export const assignRiderToOrder = TryCatch(async (req, res) => {
     if (req.headers["x-internal-key"] !== process.env.INTERNAL_SERVICE_KEY) {
         return res.status(403).json({
