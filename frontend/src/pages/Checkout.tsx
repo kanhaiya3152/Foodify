@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import type { ICart, IMenuItem, IRestaurant } from "../types";
 import toast from "react-hot-toast";
 import { BiCreditCard, BiLoader } from "react-icons/bi";
-// import { loadStripe } from "@stripe/stripe-js";
 
 interface Address {
   _id: string;
@@ -26,7 +25,6 @@ const Checkout = () => {
   const [loadingAddress, setLoadingAddress] = useState(true);
 
   const [loadingRazorpay, setLoadingRazorpay] = useState(false);
-  const [loadingStripe, setLoadingStripe] = useState(false);
   const [creatingOrder, setCreatingOrder] = useState(false);
 
   useEffect(() => {
@@ -75,7 +73,7 @@ const Checkout = () => {
 
   const grandTotal = subTotal + deliveryFee + platformFee;
 
-  const createOrder = async (paymentMethod: "razorpay" | "stripe") => {
+  const createOrder = async (paymentMethod: "razorpay") => {
     if (!selectedAddressId) return null;
 
     setCreatingOrder(true);
@@ -154,41 +152,6 @@ const Checkout = () => {
     }
   };
 
-  // const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-
-  // const payWithStripe = async () => {
-  //   try {
-  //     setLoadingStripe(true);
-  //     const order = await createOrder("stripe");
-  //     if (!order) return;
-
-  //     const { orderId } = order;
-
-  //     try {
-  //       await stripePromise;
-
-  //       const { data } = await axios.post(
-  //         `${utilsService}/api/payment/stripe/create`,
-  //         {
-  //           orderId,
-  //         }
-  //       );
-
-  //       if (data.url) {
-  //         window.location.href = data.url;
-  //       } else {
-  //         toast.error("failed to create payment session");
-  //       }
-  //     } catch (error) {
-  //       toast.error("Payment Failed");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Payment failed");
-  //   } finally {
-  //     setLoadingStripe(false);
-  //   }
-  // };
   return (
     <div className="mx-auto max-w-4xl px-4 py-6 space-y-6">
       <h1 className="text-2xl font-bold">Checkout</h1>
@@ -291,19 +254,6 @@ const Checkout = () => {
           )}
           Pay With Razorpay
         </button>
-
-        {/* <button
-          disabled={!selectedAddressId || loadingStripe || creatingOrder}
-          onClick={payWithStripe}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-black py-3 text-sm font-semibold text-white hover:bg-gray-800 disabled:opacity-50"
-        >
-          {loadingRazorpay ? (
-            <BiLoader size={18} className="animate-spin" />
-          ) : (
-            <BiCreditCard size={18} />
-          )}
-          Pay With Stripe
-        </button> */}
       </div>
     </div>
   );
