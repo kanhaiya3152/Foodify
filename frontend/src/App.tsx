@@ -29,43 +29,40 @@ const App = () => {
     );
   }
 
-  if (user && user.role === "seller") {
-    return <Restaurant />;
-  }
-
-  if (user && user.role === "rider") {
-    return <RiderDashboard />;
-  }
-
-  if (user && user.role === "admin") {
-    return <Admin />;
-  }
   return (
-    <>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route element={<PublicRoute />}>
-            <Route path="/login" element={<Login />} />
-          </Route>
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/paymentsuccess/:paymentId"
-              element={<PaymentSuccess />}
-            />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/order/:id" element={<OrderPage />} />
-            <Route path="/address" element={<AddAddressPage />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/restaurant/:id" element={<RestaurantPage />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/select-role" element={<SelectRole />} />
-            <Route path="/account" element={<Account />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      {user && user.role === "seller" ? (
+        <Restaurant />
+      ) : user && user.role === "rider" ? (
+        <RiderDashboard />
+      ) : user && user.role === "admin" ? (
+        <Admin />
+      ) : (
+        <>
+          <Navbar />
+          <Routes>
+            <Route element={<PublicRoute />}>
+              <Route path="/login" element={<Login />} />
+            </Route>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/paymentsuccess/:paymentId"
+                element={<PaymentSuccess />}
+              />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/order/:id" element={<OrderPage />} />
+              <Route path="/address" element={<AddAddressPage />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/restaurant/:id" element={<RestaurantPage />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/select-role" element={<SelectRole />} />
+              <Route path="/account" element={<Account />} />
+            </Route>
+          </Routes>
+        </>
+      )}
+    </BrowserRouter>
   );
 };
 

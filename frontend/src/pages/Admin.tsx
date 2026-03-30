@@ -3,12 +3,19 @@ import { useEffect, useState } from "react";
 import { adminService } from "../main";
 import AdminRestaurantCard from "../components/AdminRestaurantCard";
 import RiderAdmin from "../components/RiderAdmin";
+import { useAppData } from "../context/AppContext";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { BiLogOut } from "react-icons/bi";
 
 const Admin = () => {
+  const { setIsAuth, setUser } = useAppData();
   const [restaurant, setRestaurant] = useState<any[]>([]);
   const [riders, setRiders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"restaurant" | "rider">("restaurant");
+
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -18,7 +25,7 @@ const Admin = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       const response = await axios.get(
@@ -27,7 +34,7 @@ const Admin = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       setRestaurant(data.restaurants);
@@ -42,6 +49,14 @@ const Admin = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    setIsAuth(false);
+    navigate("/login");
+    toast.success("Logout Successfully");
+  };
 
   if (loading) {
     return (
@@ -71,6 +86,12 @@ const Admin = () => {
           }`}
         >
           Riders
+        </button>
+        <button
+          className="flex cursor-pointer items-center gap-2 p-5 hover:bg-gray-50"
+          onClick={logoutHandler}
+        >
+          <BiLogOut /> Logout
         </button>
       </div>
 
