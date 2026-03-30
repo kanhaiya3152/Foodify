@@ -5,6 +5,7 @@ import axios from "axios";
 import { authService } from "../main";
 
 type Role = "customer" | "rider" | "seller" | null;
+
 const SelectRole = () => {
   const [role, setRole] = useState<Role>(null);
   const { setUser } = useAppData();
