@@ -97,6 +97,7 @@ const RestaurantProfile = ({ restaurant, isSeller, onUpdate }: props) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full rounded border px-2 py-1 text-lg font-semibold"
+                aria-label="Restaurant name"
               />
             ) : (
               <h2 className="text-xl font-semibold">{restaurant.name}</h2>
@@ -113,6 +114,7 @@ const RestaurantProfile = ({ restaurant, isSeller, onUpdate }: props) => {
             <button
               onClick={() => setEditMode(!editMode)}
               className="text-gray-500 hover:text-black"
+              aria-label="Toggle edit mode"
             >
               <BiEdit size={18} />
             </button>
@@ -124,6 +126,7 @@ const RestaurantProfile = ({ restaurant, isSeller, onUpdate }: props) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full rounded border px-3 py-2 text-sm"
+            aria-label="Restaurant description"
           />
         ) : (
           <p className="text-sm text-gray-600">

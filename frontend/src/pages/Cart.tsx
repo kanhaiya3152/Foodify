@@ -46,6 +46,7 @@ const Cart = () => {
 
       await fetchCart();
     } catch (error) {
+      console.log(error);
       toast.error("something went wrong");
     } finally {
       setLoadingItemId(null);
@@ -67,6 +68,7 @@ const Cart = () => {
 
       await fetchCart();
     } catch (error) {
+      console.log(error);
       toast.error("something went wrong");
     } finally {
       setLoadingItemId(null);
@@ -86,6 +88,7 @@ const Cart = () => {
 
       await fetchCart();
     } catch (error) {
+      console.log(error);
       toast.error("something went wrong");
     } finally {
       setClearingCart(false);

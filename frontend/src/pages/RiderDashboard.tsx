@@ -51,6 +51,7 @@ const RiderDashboard = () => {
       setAudioUnlocked(true);
       toast.success("Sound Enabled");
     } catch (error) {
+      console.log(error);
       toast.error("Tap again to enable sound");
     }
   };
@@ -90,6 +91,7 @@ const RiderDashboard = () => {
 
       setProfile(data || null);
     } catch (error) {
+      console.log(error);
       setProfile(null);
     } finally {
       setLoading(false);

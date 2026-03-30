@@ -129,6 +129,7 @@ const MenuItems = ({ items, onItemDeleted, isSeller }: MenuItemsProps) => {
                     <button
                       onClick={() => toggleAvailiblity(item._id)}
                       className="rounded-lg p-2 text-gray-600 hover:bg-gray-100"
+                      aria-label={item.isAvailable ? "Hide item" : "Show item"}
                     >
                       {item.isAvailable ? (
                         <BsEye size={18} />
@@ -140,6 +141,7 @@ const MenuItems = ({ items, onItemDeleted, isSeller }: MenuItemsProps) => {
                     <button
                       onClick={() => handleDelete(item._id)}
                       className="rounded-lg p-2 text-red-500 hover:bg-red-50"
+                      aria-label="Delete item"
                     >
                       <BiTrash size={18} />
                     </button>
@@ -155,6 +157,7 @@ const MenuItems = ({ items, onItemDeleted, isSeller }: MenuItemsProps) => {
                         ? "cursor-not-allowed text-gray-400"
                         : "text-red-500 hover:bg-red-50"
                     }`}
+                    aria-label={isLoading ? "Adding to cart" : "Add to cart"}
                   >
                     {isLoading ? (
                       <VscLoading size={18} className="animate-spin" />

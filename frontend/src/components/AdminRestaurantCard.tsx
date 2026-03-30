@@ -23,6 +23,7 @@ const AdminRestaurantCard = ({
       toast.success("Restaurant verified");
       onVerify();
     } catch (error) {
+      console.log(error);
       toast.error("failed ot verify restaurant");
     }
   };

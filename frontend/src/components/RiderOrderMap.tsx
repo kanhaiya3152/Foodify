@@ -12,7 +12,7 @@ declare module "leaflet" {
     control(options: any): any;
     osrmv1(options?: any): any;
   }
-  const Routing: RoutingStatic;
+  const Routingg: RoutingStatic;
 }
 
 const riderIcon = new L.DivIcon({
@@ -64,7 +64,9 @@ const Routing = ({
 };
 
 const RiderOrderMap = ({ order }: Props) => {
-  const [riderLocation, setRiderLocation] = useState<[number, number] | null>(null);
+  const [riderLocation, setRiderLocation] = useState<[number, number] | null>(
+    null,
+  );
 
   useEffect(() => {
     const fetchLocation = () => {
@@ -86,7 +88,7 @@ const RiderOrderMap = ({ order }: Props) => {
               headers: {
                 "x-internal-key": import.meta.env.VITE_INTERNAL_SERVICE_KEY,
               },
-            }
+            },
           );
         },
         (err) => console.log("Location Error:", err),
@@ -94,7 +96,7 @@ const RiderOrderMap = ({ order }: Props) => {
           enableHighAccuracy: true,
           maximumAge: 5000,
           timeout: 10000,
-        }
+        },
       );
     };
 

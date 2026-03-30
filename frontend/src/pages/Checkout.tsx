@@ -94,6 +94,7 @@ const Checkout = () => {
       return data;
     } catch (error) {
       toast.error("Failed to create Order");
+      console.log(error);
     } finally {
       setCreatingOrder(false);
     }
@@ -134,6 +135,7 @@ const Checkout = () => {
             toast.success("Payment successful 🎉");
             navigate("/paymentsuccess/" + response.razorpay_payment_id);
           } catch (error) {
+            console.log(error);
             toast.error("Payment verification failed");
           }
         },
