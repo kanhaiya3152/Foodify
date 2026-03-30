@@ -7,14 +7,6 @@ import "leaflet-routing-machine";
 import axios from "axios";
 import { realtimeService } from "../main";
 
-declare module "leaflet" {
-  interface RoutingStatic {
-    control(options: any): any;
-    osrmv1(options?: any): any;
-  }
-  const Routingg: RoutingStatic;
-}
-
 const riderIcon = new L.DivIcon({
   html: "🛵",
   iconSize: [30, 30],
@@ -31,7 +23,7 @@ interface Props {
   order: IOrder;
 }
 
-const Routing = ({
+const MapRoute = ({
   from,
   to,
 }: {
@@ -137,7 +129,7 @@ const RiderOrderMap = ({ order }: Props) => {
         <Marker position={deliveryLocation} icon={deliveryIcon}>
           <Popup>Delivery Location</Popup>
         </Marker>
-        <Routing from={riderLocation} to={deliveryLocation} />
+        <MapRoute from={riderLocation} to={deliveryLocation} />
       </MapContainer>
     </div>
   );

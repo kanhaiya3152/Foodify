@@ -4,14 +4,6 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine";
 import { useEffect } from "react";
 
-declare module "leaflet" {
-  interface RoutingStatic {
-    control(options: any): any;
-    osrmv1(options?: any): any;
-  }
-  const Routing: RoutingStatic;
-}
-
 const riderIcon = new L.DivIcon({
   html: "🛵",
   iconSize: [30, 30],
@@ -24,7 +16,7 @@ const deliveryIcon = new L.DivIcon({
   className: "",
 });
 
-const Routing = ({
+const MapRoute = ({
   from,
   to,
 }: {
@@ -79,7 +71,7 @@ const UserOrderMap = ({ riderLocation, deliveryLocation }: props) => {
         <Marker position={deliveryLocation} icon={deliveryIcon}>
           <Popup>Delivery Location</Popup>
         </Marker>
-        <Routing from={riderLocation} to={deliveryLocation} />
+        <MapRoute from={riderLocation} to={deliveryLocation} />
       </MapContainer>
     </div>
   );
