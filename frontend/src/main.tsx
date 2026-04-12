@@ -7,7 +7,7 @@ import { AppProvider } from './context/AppContext'
 import "leaflet/dist/leaflet.css"
 import { SocketProvider } from './context/SocketContext'
 
-export const authService = "https://foodify-auth.onrender.com"
+export const authService = "https://foodify-auth-1.onrender.com"
 export const restaurantService = "https://foodify-restaurant.onrender.com"
 export const utilsService = "https://foodify-utils-service.onrender.com"
 export const realtimeService = "https://foodify-realtime-service.onrender.com"
