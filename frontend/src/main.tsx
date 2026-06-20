@@ -7,12 +7,19 @@ import { AppProvider } from './context/AppContext'
 import "leaflet/dist/leaflet.css"
 import { SocketProvider } from './context/SocketContext'
 
-export const authService = "https://foodify-auth-1.onrender.com"
-export const restaurantService = "https://foodify-restaurant.onrender.com"
-export const utilsService = "https://foodify-utils-service.onrender.com"
-export const realtimeService = "https://foodify-realtime-service.onrender.com"
-export const riderService = "https://foodify-rider-service.onrender.com"
-export const adminService = "https://foodify-admin-service.onrender.com"
+const authServiceUrl = import.meta.env.VITE_AUTH_SERVICE ?? 'http://localhost:5000'
+const restaurantServiceUrl = import.meta.env.VITE_RESTAURANT_SERVICE ?? 'http://localhost:5001'
+const utilsServiceUrl = import.meta.env.VITE_UTILS_SERVICE ?? 'http://localhost:5002'
+const realtimeServiceUrl = import.meta.env.VITE_REALTIME_SERVICE ?? 'http://localhost:5004'
+const riderServiceUrl = import.meta.env.VITE_RIDER_SERVICE ?? 'http://localhost:5005'
+const adminServiceUrl = import.meta.env.VITE_ADMIN_SERVICE ?? 'http://localhost:5006'
+
+export const authService = authServiceUrl
+export const restaurantService = restaurantServiceUrl
+export const utilsService = utilsServiceUrl
+export const realtimeService = realtimeServiceUrl
+export const riderService = riderServiceUrl
+export const adminService = adminServiceUrl
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

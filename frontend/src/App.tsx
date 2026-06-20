@@ -58,6 +58,7 @@ const App = () => {
               <Route path="/cart" element={<Cart />} />
               <Route path="/select-role" element={<SelectRole />} />
               <Route path="/account" element={<Account />} />
+              {/* <Route path="*" element = {pageNotFound}  /> */}
             </Route>
           </Routes>
         </>
