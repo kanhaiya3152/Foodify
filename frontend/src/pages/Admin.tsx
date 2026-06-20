@@ -146,14 +146,11 @@ const Admin = () => {
 
   if (loading) {
     return (
-      <div
-        style={{ background: "#0f1117" }}
-        className="min-h-screen flex items-center justify-center"
-      >
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#f9fafb" }}>
         <div className="text-center space-y-4">
           <div
-            className="w-10 h-10 rounded-full border-4 border-t-transparent animate-spin mx-auto"
-            style={{ borderColor: "#2a2d3a", borderTopColor: "#6366f1" }}
+            className="w-10 h-10 rounded-full border-4 animate-spin mx-auto"
+            style={{ borderColor: "#e5e7eb", borderTopColor: "#6366f1" }}
           />
           <p style={{ color: "#6b7280" }} className="text-sm">Loading admin panel...</p>
         </div>
@@ -162,15 +159,15 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#0f1117", color: "#e5e7eb" }}>
+    <div className="min-h-screen flex" style={{ background: "#f9fafb", color: "#111827" }}>
 
       {/* ── Sidebar ── */}
       <aside
         className="w-60 flex-shrink-0 flex flex-col"
-        style={{ background: "#13161f", borderRight: "1px solid #1f2231" }}
+        style={{ background: "#ffffff", borderRight: "1px solid #e5e7eb" }}
       >
         {/* Logo */}
-        <div className="px-5 py-5" style={{ borderBottom: "1px solid #1f2231" }}>
+        <div className="px-5 py-5" style={{ borderBottom: "1px solid #e5e7eb" }}>
           <div className="flex items-center gap-3">
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center"
@@ -179,31 +176,31 @@ const Admin = () => {
               <FiHome size={16} className="text-white" />
             </div>
             <div>
-              <p className="text-white font-bold text-base leading-none">Foodify</p>
-              <p className="text-xs mt-0.5" style={{ color: "#6b7280" }}>Admin Panel</p>
+              <p className="font-bold text-base leading-none" style={{ color: "#111827" }}>Foodify</p>
+              <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>Admin Panel</p>
             </div>
           </div>
         </div>
 
         {/* Admin info */}
-        <div className="px-4 py-4" style={{ borderBottom: "1px solid #1f2231" }}>
+        <div className="px-4 py-4" style={{ borderBottom: "1px solid #e5e7eb" }}>
           <div
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl"
-            style={{ background: "#1a1d2a" }}
+            style={{ background: "#f3f4f6" }}
           >
             {user?.image ? (
               <img src={user.image} className="w-8 h-8 rounded-lg object-cover" alt="admin" />
             ) : (
               <div
                 className="w-8 h-8 rounded-lg flex items-center justify-center"
-                style={{ background: "#1f2231" }}
+                style={{ background: "#e5e7eb" }}
               >
-                <FiUsers size={14} style={{ color: "#6b7280" }} />
+                <FiUsers size={14} style={{ color: "#9ca3af" }} />
               </div>
             )}
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-white truncate">{user?.name || "Admin"}</p>
-              <p className="text-xs truncate" style={{ color: "#6b7280" }}>{user?.email || ""}</p>
+              <p className="text-sm font-semibold truncate" style={{ color: "#111827" }}>{user?.name || "Admin"}</p>
+              <p className="text-xs truncate" style={{ color: "#9ca3af" }}>{user?.email || ""}</p>
             </div>
           </div>
         </div>
@@ -217,8 +214,8 @@ const Admin = () => {
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer text-left"
               style={
                 tab === item.id
-                  ? { background: "#1e2035", color: "#818cf8", border: "1px solid #2d2f50" }
-                  : { background: "transparent", color: "#9ca3af", border: "1px solid transparent" }
+                  ? { background: "#eef2ff", color: "#4f46e5", border: "1px solid #c7d2fe" }
+                  : { background: "transparent", color: "#6b7280", border: "1px solid transparent" }
               }
             >
               {item.icon}
@@ -226,7 +223,7 @@ const Admin = () => {
               {item.id === "restaurant" && stats && stats.pendingRestaurants > 0 && (
                 <span
                   className="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full"
-                  style={{ background: "#f59e0b", color: "#000" }}
+                  style={{ background: "#f59e0b", color: "#fff" }}
                 >
                   {stats.pendingRestaurants}
                 </span>
@@ -234,7 +231,7 @@ const Admin = () => {
               {item.id === "rider" && stats && stats.pendingRiders > 0 && (
                 <span
                   className="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full"
-                  style={{ background: "#f59e0b", color: "#000" }}
+                  style={{ background: "#f59e0b", color: "#fff" }}
                 >
                   {stats.pendingRiders}
                 </span>
@@ -244,17 +241,17 @@ const Admin = () => {
         </nav>
 
         {/* Logout */}
-        <div className="px-3 py-4" style={{ borderTop: "1px solid #1f2231" }}>
+        <div className="px-3 py-4" style={{ borderTop: "1px solid #e5e7eb" }}>
           <button
             onClick={logoutHandler}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer"
-            style={{ color: "#9ca3af" }}
+            style={{ color: "#6b7280" }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.color = "#f87171";
-              (e.currentTarget as HTMLButtonElement).style.background = "#1f1a1a";
+              (e.currentTarget as HTMLButtonElement).style.color = "#ef4444";
+              (e.currentTarget as HTMLButtonElement).style.background = "#fef2f2";
             }}
             onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.color = "#9ca3af";
+              (e.currentTarget as HTMLButtonElement).style.color = "#6b7280";
               (e.currentTarget as HTMLButtonElement).style.background = "transparent";
             }}
           >
@@ -270,15 +267,19 @@ const Admin = () => {
         {/* Top bar */}
         <div
           className="sticky top-0 z-10 flex items-center justify-between px-8 py-4"
-          style={{ background: "#0f1117cc", backdropFilter: "blur(12px)", borderBottom: "1px solid #1f2231" }}
+          style={{
+            background: "rgba(255,255,255,0.85)",
+            backdropFilter: "blur(12px)",
+            borderBottom: "1px solid #e5e7eb",
+          }}
         >
           <div>
-            <h2 className="text-white font-bold text-lg">
+            <h2 className="font-bold text-lg" style={{ color: "#111827" }}>
               {tab === "dashboard" && "Dashboard"}
               {tab === "restaurant" && "Restaurants"}
               {tab === "rider" && "Riders"}
             </h2>
-            <p className="text-xs mt-0.5" style={{ color: "#6b7280" }}>
+            <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>
               {tab === "dashboard" && "Platform overview"}
               {tab === "restaurant" && `${restaurants.length} total registered`}
               {tab === "rider" && `${riders.length} total registered`}
@@ -288,7 +289,7 @@ const Admin = () => {
             onClick={() => fetchData(true)}
             disabled={refreshing}
             className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl cursor-pointer disabled:opacity-50 transition-colors"
-            style={{ background: "#1a1d2a", border: "1px solid #2a2d3a", color: "#9ca3af" }}
+            style={{ background: "#f3f4f6", border: "1px solid #e5e7eb", color: "#6b7280" }}
           >
             <FiRefreshCw size={13} className={refreshing ? "animate-spin" : ""} />
             Refresh
@@ -302,12 +303,12 @@ const Admin = () => {
             <div className="space-y-5">
               {/* Stats grid */}
               <div className="grid grid-cols-2 xl:grid-cols-3 gap-4">
-                <StatCard icon={<MdOutlineRestaurant size={20} />} label="Total Restaurants" value={stats.totalRestaurants} accent="#6366f1" />
-                <StatCard icon={<FiCheckCircle size={18} />} label="Verified Restaurants" value={stats.verifiedRestaurants} accent="#10b981" />
-                <StatCard icon={<FiClock size={18} />} label="Pending Restaurants" value={stats.pendingRestaurants} accent="#f59e0b" alert={stats.pendingRestaurants > 0} />
-                <StatCard icon={<MdOutlineDirectionsBike size={20} />} label="Total Riders" value={stats.totalRiders} accent="#6366f1" />
-                <StatCard icon={<FiCheckCircle size={18} />} label="Verified Riders" value={stats.verifiedRiders} accent="#10b981" />
-                <StatCard icon={<FiClock size={18} />} label="Pending Riders" value={stats.pendingRiders} accent="#f59e0b" alert={stats.pendingRiders > 0} />
+                <StatCard icon={<MdOutlineRestaurant size={20} />} label="Total Restaurants"    value={stats.totalRestaurants}    accent="#6366f1" />
+                <StatCard icon={<FiCheckCircle size={18} />}       label="Verified Restaurants" value={stats.verifiedRestaurants} accent="#10b981" />
+                <StatCard icon={<FiClock size={18} />}             label="Pending Restaurants"  value={stats.pendingRestaurants}  accent="#f59e0b" alert={stats.pendingRestaurants > 0} />
+                <StatCard icon={<MdOutlineDirectionsBike size={20} />} label="Total Riders"     value={stats.totalRiders}         accent="#6366f1" />
+                <StatCard icon={<FiCheckCircle size={18} />}       label="Verified Riders"      value={stats.verifiedRiders}      accent="#10b981" />
+                <StatCard icon={<FiClock size={18} />}             label="Pending Riders"       value={stats.pendingRiders}       accent="#f59e0b" alert={stats.pendingRiders > 0} />
               </div>
 
               {/* Progress bars */}
@@ -332,14 +333,14 @@ const Admin = () => {
               {(stats.pendingRestaurants > 0 || stats.pendingRiders > 0) && (
                 <div
                   className="px-5 py-4 rounded-xl flex items-start gap-3"
-                  style={{ background: "#1c1a0f", border: "1px solid #3a2f0a" }}
+                  style={{ background: "#fffbeb", border: "1px solid #fde68a" }}
                 >
                   <FiClock size={18} style={{ color: "#f59e0b", marginTop: 2, flexShrink: 0 }} />
                   <div>
-                    <p className="text-sm font-semibold" style={{ color: "#fbbf24" }}>
+                    <p className="text-sm font-semibold" style={{ color: "#92400e" }}>
                       Pending verifications need attention
                     </p>
-                    <p className="text-xs mt-0.5" style={{ color: "#d97706" }}>
+                    <p className="text-xs mt-0.5" style={{ color: "#b45309" }}>
                       {stats.pendingRestaurants > 0 && `${stats.pendingRestaurants} restaurant${stats.pendingRestaurants > 1 ? "s" : ""} `}
                       {stats.pendingRestaurants > 0 && stats.pendingRiders > 0 && "and "}
                       {stats.pendingRiders > 0 && `${stats.pendingRiders} rider${stats.pendingRiders > 1 ? "s" : ""} `}
@@ -418,19 +419,19 @@ const StatCard = ({
   <div
     className="rounded-2xl p-5 flex items-center gap-4 transition-all duration-200"
     style={{
-      background: "#13161f",
-      border: `1px solid ${alert ? "#3a2f0a" : "#1f2231"}`,
+      background: "#ffffff",
+      border: `1px solid ${alert ? "#fde68a" : "#e5e7eb"}`,
     }}
   >
     <div
       className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-      style={{ background: accent + "22", color: accent }}
+      style={{ background: accent + "18", color: accent }}
     >
       {icon}
     </div>
     <div>
-      <p className="text-3xl font-bold text-white">{value}</p>
-      <p className="text-xs mt-0.5" style={{ color: "#6b7280" }}>{label}</p>
+      <p className="text-3xl font-bold" style={{ color: "#111827" }}>{value}</p>
+      <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>{label}</p>
     </div>
   </div>
 );
@@ -449,22 +450,22 @@ const ProgressCard = ({
   return (
     <div
       className="rounded-2xl p-5"
-      style={{ background: "#13161f", border: "1px solid #1f2231" }}
+      style={{ background: "#ffffff", border: "1px solid #e5e7eb" }}
     >
       <div className="flex items-center gap-2 mb-4">
         <span style={{ color: barColor }}>{icon}</span>
-        <p className="text-sm font-semibold text-white">{title}</p>
+        <p className="text-sm font-semibold" style={{ color: "#111827" }}>{title}</p>
         <span className="ml-auto text-lg font-bold" style={{ color: barColor }}>{pct}%</span>
       </div>
-      <div className="w-full h-2 rounded-full" style={{ background: "#1f2231" }}>
+      <div className="w-full h-2 rounded-full" style={{ background: "#f3f4f6" }}>
         <div
           className="h-full rounded-full transition-all duration-700"
           style={{ width: `${pct}%`, background: barColor }}
         />
       </div>
-      <div className="flex justify-between mt-3 text-xs" style={{ color: "#6b7280" }}>
-        <span><span className="text-white font-medium">{verified}</span> verified</span>
-        <span><span className="text-white font-medium">{total}</span> total</span>
+      <div className="flex justify-between mt-3 text-xs" style={{ color: "#9ca3af" }}>
+        <span><span style={{ color: "#111827" }} className="font-medium">{verified}</span> verified</span>
+        <span><span style={{ color: "#111827" }} className="font-medium">{total}</span> total</span>
       </div>
     </div>
   );
@@ -486,8 +487,8 @@ const FilterBar = ({
         className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all duration-150 capitalize"
         style={
           filter === f
-            ? { background: "#6366f1", color: "#fff" }
-            : { background: "#13161f", color: "#9ca3af", border: "1px solid #1f2231" }
+            ? { background: "#6366f1", color: "#ffffff", border: "1px solid #6366f1" }
+            : { background: "#ffffff", color: "#6b7280", border: "1px solid #e5e7eb" }
         }
       >
         {f}
@@ -495,8 +496,8 @@ const FilterBar = ({
           className="text-xs px-1.5 py-0.5 rounded-full font-bold"
           style={
             filter === f
-              ? { background: "rgba(255,255,255,0.2)", color: "#fff" }
-              : { background: "#1f2231", color: "#6b7280" }
+              ? { background: "rgba(255,255,255,0.25)", color: "#fff" }
+              : { background: "#f3f4f6", color: "#9ca3af" }
           }
         >
           {counts[f]}
@@ -511,12 +512,12 @@ const EmptyState = ({ label }: { label: string }) => (
   <div className="flex flex-col items-center justify-center py-20">
     <div
       className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
-      style={{ background: "#13161f", border: "1px solid #1f2231" }}
+      style={{ background: "#f3f4f6", border: "1px solid #e5e7eb" }}
     >
-      <FiUsers size={26} style={{ color: "#4b5563" }} />
+      <FiUsers size={26} style={{ color: "#d1d5db" }} />
     </div>
-    <p style={{ color: "#9ca3af" }} className="font-medium">No {label === "all" ? "" : label} entries found</p>
-    <p style={{ color: "#4b5563" }} className="text-sm mt-1">Nothing to display here.</p>
+    <p style={{ color: "#6b7280" }} className="font-medium">No {label === "all" ? "" : label} entries found</p>
+    <p style={{ color: "#d1d5db" }} className="text-sm mt-1">Nothing to display here.</p>
   </div>
 );
 
