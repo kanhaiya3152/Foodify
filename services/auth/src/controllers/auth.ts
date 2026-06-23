@@ -26,6 +26,7 @@ export const loginUser = TryCatch(async (req, res) => {
 
   let user = await User.findOne({ email });
 
+  // if user is not available in DB then create the user and add it into DB
   if (!user) {
     user = await User.create({
       name,
@@ -39,7 +40,7 @@ export const loginUser = TryCatch(async (req, res) => {
   });
 
   res.status(200).json({
-    message: "Logged Success",
+    message: "Login Successfully",
     token,
     user,
   });

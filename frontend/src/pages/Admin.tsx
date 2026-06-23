@@ -8,11 +8,9 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
   FiLogOut,
-  FiHome,
   FiUsers,
   FiCheckCircle,
   FiClock,
-  FiRefreshCw,
   FiGrid,
 } from "react-icons/fi";
 import { MdOutlineRestaurant, MdOutlineDirectionsBike } from "react-icons/md";
@@ -29,13 +27,20 @@ interface Stats {
   pendingRiders: number;
 }
 
+const ACCENT_CLASSES: Record<string, { bg: string; text: string }> = {
+  "#6366f1": { bg: "bg-indigo-100", text: "text-indigo-600" },
+  "#10b981": { bg: "bg-emerald-100", text: "text-emerald-600" },
+  "#f59e0b": { bg: "bg-amber-100", text: "text-amber-600" },
+};
+
+const getAccentClasses = (accent: string) => ACCENT_CLASSES[accent] ?? { bg: "bg-slate-100", text: "text-slate-700" };
+
 const Admin = () => {
   const { setIsAuth, setUser, user } = useAppData();
   const [restaurants, setRestaurants] = useState<any[]>([]);
   const [riders, setRiders] = useState<any[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [tab, setTab] = useState<Tab>("dashboard");
   const [restaurantFilter, setRestaurantFilter] = useState<Filter>("all");
   const [riderFilter, setRiderFilter] = useState<Filter>("all");
@@ -48,7 +53,6 @@ const Admin = () => {
 
   const fetchData = async (silent = false) => {
     if (!silent) setLoading(true);
-    else setRefreshing(true);
 
     try {
       // Restaurants — try /all, fallback to /pending
@@ -110,7 +114,6 @@ const Admin = () => {
       toast.error("Failed to load dashboard data");
     } finally {
       setLoading(false);
-      setRefreshing(false);
     }
   };
 
@@ -146,114 +149,78 @@ const Admin = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#f9fafb" }}>
+      <div className="min-h-screen flex items-center justify-center bg-[#f9fafb]">
         <div className="text-center space-y-4">
-          <div
-            className="w-10 h-10 rounded-full border-4 animate-spin mx-auto"
-            style={{ borderColor: "#e5e7eb", borderTopColor: "#6366f1" }}
-          />
-          <p style={{ color: "#6b7280" }} className="text-sm">Loading admin panel...</p>
+          <div className="w-10 h-10 rounded-full border-4 border-slate-200 border-t-indigo-600 animate-spin mx-auto" />
+          <p className="text-sm text-slate-500">Loading admin panel...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#f9fafb", color: "#111827" }}>
+    <div className="min-h-screen flex bg-slate-50 text-slate-950">
 
       {/* ── Sidebar ── */}
-      <aside
-        className="w-60 flex-shrink-0 flex flex-col"
-        style={{ background: "#ffffff", borderRight: "1px solid #e5e7eb" }}
-      >
+      <aside className="w-60 flex-shrink-0 flex flex-col bg-white border-r-2 border-slate-200">
         {/* Logo */}
-        <div className="px-5 py-5" style={{ borderBottom: "1px solid #e5e7eb" }}>
+        <div className="px-5 py-5 border-b-2 border-slate-200">
           <div className="flex items-center gap-3">
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center"
-              style={{ background: "#6366f1" }}
-            >
-              <FiHome size={16} className="text-white" />
-            </div>
             <div>
-              <p className="font-bold text-base leading-none" style={{ color: "#111827" }}>Foodify</p>
-              <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>Admin Panel</p>
+              <p className="font-bold text-3xl text-[#E23744] leading-none">Foodify</p>
             </div>
           </div>
         </div>
 
         {/* Admin info */}
-        <div className="px-4 py-4" style={{ borderBottom: "1px solid #e5e7eb" }}>
-          <div
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl"
-            style={{ background: "#f3f4f6" }}
-          >
+        <div className="px-4 py-4 border-b-2 border-slate-200">
+          <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-slate-100">
             {user?.image ? (
               <img src={user.image} className="w-8 h-8 rounded-lg object-cover" alt="admin" />
             ) : (
-              <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center"
-                style={{ background: "#e5e7eb" }}
-              >
-                <FiUsers size={14} style={{ color: "#9ca3af" }} />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-200">
+                <FiUsers size={14} className="text-slate-400" />
               </div>
             )}
             <div className="min-w-0">
-              <p className="text-sm font-semibold truncate" style={{ color: "#111827" }}>{user?.name || "Admin"}</p>
-              <p className="text-xs truncate" style={{ color: "#9ca3af" }}>{user?.email || ""}</p>
+              <p className="text-sm font-semibold truncate text-slate-950">{user?.name || "Admin"}</p>
+              <p className="text-xs truncate text-slate-400">{user?.email || ""}</p>
             </div>
           </div>
         </div>
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-1">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setTab(item.id)}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer text-left"
-              style={
-                tab === item.id
-                  ? { background: "#eef2ff", color: "#4f46e5", border: "1px solid #c7d2fe" }
-                  : { background: "transparent", color: "#6b7280", border: "1px solid transparent" }
-              }
-            >
-              {item.icon}
-              {item.label}
-              {item.id === "restaurant" && stats && stats.pendingRestaurants > 0 && (
-                <span
-                  className="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full"
-                  style={{ background: "#f59e0b", color: "#fff" }}
-                >
-                  {stats.pendingRestaurants}
-                </span>
-              )}
-              {item.id === "rider" && stats && stats.pendingRiders > 0 && (
-                <span
-                  className="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full"
-                  style={{ background: "#f59e0b", color: "#fff" }}
-                >
-                  {stats.pendingRiders}
-                </span>
-              )}
-            </button>
-          ))}
+          {navItems.map((item) => {
+            const isActive = tab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setTab(item.id)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer text-left ${isActive ? "bg-gray-100 text-slate-500 border border-gray-200" : "bg-transparent text-slate-500 border border-transparent"}`}
+              >
+                {item.icon}
+                {item.label}
+                {item.id === "restaurant" && stats && stats.pendingRestaurants > 0 && (
+                  <span className="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full bg-amber-500 text-white">
+                    {stats.pendingRestaurants}
+                  </span>
+                )}
+                {item.id === "rider" && stats && stats.pendingRiders > 0 && (
+                  <span className="ml-auto text-xs font-bold px-1.5 py-0.5 rounded-full bg-amber-500 text-white">
+                    {stats.pendingRiders}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </nav>
 
         {/* Logout */}
-        <div className="px-3 py-4" style={{ borderTop: "1px solid #e5e7eb" }}>
+        <div className="px-3 py-4 border-t border-slate-200">
           <button
             onClick={logoutHandler}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer"
-            style={{ color: "#6b7280" }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.color = "#ef4444";
-              (e.currentTarget as HTMLButtonElement).style.background = "#fef2f2";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.color = "#6b7280";
-              (e.currentTarget as HTMLButtonElement).style.background = "transparent";
-            }}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer text-slate-500 hover:text-red-500 hover:bg-red-50"
           >
             <FiLogOut size={17} />
             Logout
@@ -265,35 +232,19 @@ const Admin = () => {
       <main className="flex-1 overflow-auto">
 
         {/* Top bar */}
-        <div
-          className="sticky top-0 z-10 flex items-center justify-between px-8 py-4"
-          style={{
-            background: "rgba(255,255,255,0.85)",
-            backdropFilter: "blur(12px)",
-            borderBottom: "1px solid #e5e7eb",
-          }}
-        >
+        <div className="sticky top-0 z-10 flex items-center justify-between px-8 py-4 bg-white backdrop-blur border-b-2 border-slate-200">
           <div>
-            <h2 className="font-bold text-lg" style={{ color: "#111827" }}>
+            <h2 className="font-bold text-2xl text-slate-850">
               {tab === "dashboard" && "Dashboard"}
               {tab === "restaurant" && "Restaurants"}
               {tab === "rider" && "Riders"}
             </h2>
-            <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>
+            <p className="text-xs mt-0.5 text-slate-400">
               {tab === "dashboard" && "Platform overview"}
               {tab === "restaurant" && `${restaurants.length} total registered`}
               {tab === "rider" && `${riders.length} total registered`}
             </p>
           </div>
-          <button
-            onClick={() => fetchData(true)}
-            disabled={refreshing}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-xl cursor-pointer disabled:opacity-50 transition-colors"
-            style={{ background: "#f3f4f6", border: "1px solid #e5e7eb", color: "#6b7280" }}
-          >
-            <FiRefreshCw size={13} className={refreshing ? "animate-spin" : ""} />
-            Refresh
-          </button>
         </div>
 
         <div className="px-8 py-6">
@@ -309,46 +260,7 @@ const Admin = () => {
                 <StatCard icon={<MdOutlineDirectionsBike size={20} />} label="Total Riders"     value={stats.totalRiders}         accent="#6366f1" />
                 <StatCard icon={<FiCheckCircle size={18} />}       label="Verified Riders"      value={stats.verifiedRiders}      accent="#10b981" />
                 <StatCard icon={<FiClock size={18} />}             label="Pending Riders"       value={stats.pendingRiders}       accent="#f59e0b" alert={stats.pendingRiders > 0} />
-              </div>
-
-              {/* Progress bars */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <ProgressCard
-                  title="Restaurant Verification"
-                  icon={<MdOutlineRestaurant size={15} />}
-                  verified={stats.verifiedRestaurants}
-                  total={stats.totalRestaurants}
-                  barColor="#6366f1"
-                />
-                <ProgressCard
-                  title="Rider Verification"
-                  icon={<MdOutlineDirectionsBike size={15} />}
-                  verified={stats.verifiedRiders}
-                  total={stats.totalRiders}
-                  barColor="#10b981"
-                />
-              </div>
-
-              {/* Pending alert */}
-              {(stats.pendingRestaurants > 0 || stats.pendingRiders > 0) && (
-                <div
-                  className="px-5 py-4 rounded-xl flex items-start gap-3"
-                  style={{ background: "#fffbeb", border: "1px solid #fde68a" }}
-                >
-                  <FiClock size={18} style={{ color: "#f59e0b", marginTop: 2, flexShrink: 0 }} />
-                  <div>
-                    <p className="text-sm font-semibold" style={{ color: "#92400e" }}>
-                      Pending verifications need attention
-                    </p>
-                    <p className="text-xs mt-0.5" style={{ color: "#b45309" }}>
-                      {stats.pendingRestaurants > 0 && `${stats.pendingRestaurants} restaurant${stats.pendingRestaurants > 1 ? "s" : ""} `}
-                      {stats.pendingRestaurants > 0 && stats.pendingRiders > 0 && "and "}
-                      {stats.pendingRiders > 0 && `${stats.pendingRiders} rider${stats.pendingRiders > 1 ? "s" : ""} `}
-                      awaiting approval.
-                    </p>
-                  </div>
-                </div>
-              )}
+              </div>              
             </div>
           )}
 
@@ -408,64 +320,23 @@ const Admin = () => {
 
 /* ── StatCard ── */
 const StatCard = ({
-  icon, label, value, accent, alert,
+  icon, label, value, accent,
 }: {
   icon: React.ReactNode;
   label: string;
   value: number;
   accent: string;
   alert?: boolean;
-}) => (
-  <div
-    className="rounded-2xl p-5 flex items-center gap-4 transition-all duration-200"
-    style={{
-      background: "#ffffff",
-      border: `1px solid ${alert ? "#fde68a" : "#e5e7eb"}`,
-    }}
-  >
-    <div
-      className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
-      style={{ background: accent + "18", color: accent }}
-    >
-      {icon}
-    </div>
-    <div>
-      <p className="text-3xl font-bold" style={{ color: "#111827" }}>{value}</p>
-      <p className="text-xs mt-0.5" style={{ color: "#9ca3af" }}>{label}</p>
-    </div>
-  </div>
-);
-
-/* ── ProgressCard ── */
-const ProgressCard = ({
-  title, icon, verified, total, barColor,
-}: {
-  title: string;
-  icon: React.ReactNode;
-  verified: number;
-  total: number;
-  barColor: string;
 }) => {
-  const pct = total > 0 ? Math.round((verified / total) * 100) : 0;
+  const accentClass = getAccentClasses(accent);
   return (
-    <div
-      className="rounded-2xl p-5"
-      style={{ background: "#ffffff", border: "1px solid #e5e7eb" }}
-    >
-      <div className="flex items-center gap-2 mb-4">
-        <span style={{ color: barColor }}>{icon}</span>
-        <p className="text-sm font-semibold" style={{ color: "#111827" }}>{title}</p>
-        <span className="ml-auto text-lg font-bold" style={{ color: barColor }}>{pct}%</span>
+    <div className={`rounded-2xl p-5 border-2 flex items-center gap-4 transition-all duration-200 bg-white border-slate-200`}>
+      <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${accentClass.bg} ${accentClass.text}`}>
+        {icon}
       </div>
-      <div className="w-full h-2 rounded-full" style={{ background: "#f3f4f6" }}>
-        <div
-          className="h-full rounded-full transition-all duration-700"
-          style={{ width: `${pct}%`, background: barColor }}
-        />
-      </div>
-      <div className="flex justify-between mt-3 text-xs" style={{ color: "#9ca3af" }}>
-        <span><span style={{ color: "#111827" }} className="font-medium">{verified}</span> verified</span>
-        <span><span style={{ color: "#111827" }} className="font-medium">{total}</span> total</span>
+      <div>
+        <p className="text-3xl font-bold text-slate-850">{value}</p>
+        <p className="text-xs mt-0.5 text-slate-500">{label}</p>
       </div>
     </div>
   );
@@ -484,22 +355,10 @@ const FilterBar = ({
       <button
         key={f}
         onClick={() => setFilter(f)}
-        className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all duration-150 capitalize"
-        style={
-          filter === f
-            ? { background: "#6366f1", color: "#ffffff", border: "1px solid #6366f1" }
-            : { background: "#ffffff", color: "#6b7280", border: "1px solid #e5e7eb" }
-        }
+        className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all duration-150 capitalize ${filter === f ? "bg-gray-100 text-slate-600 border border-slate-200" : "bg-white text-slate-500 border border-slate-200"}`}
       >
         {f}
-        <span
-          className="text-xs px-1.5 py-0.5 rounded-full font-bold"
-          style={
-            filter === f
-              ? { background: "rgba(255,255,255,0.25)", color: "#fff" }
-              : { background: "#f3f4f6", color: "#9ca3af" }
-          }
-        >
+        <span className={`text-xs px-1.5 py-0.5 rounded-full font-bold ${filter === f ? "bg-slate-200 text-slate-600" : "bg-slate-100 text-slate-400"}`}>
           {counts[f]}
         </span>
       </button>
@@ -510,14 +369,11 @@ const FilterBar = ({
 /* ── EmptyState ── */
 const EmptyState = ({ label }: { label: string }) => (
   <div className="flex flex-col items-center justify-center py-20">
-    <div
-      className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
-      style={{ background: "#f3f4f6", border: "1px solid #e5e7eb" }}
-    >
-      <FiUsers size={26} style={{ color: "#d1d5db" }} />
+    <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 bg-slate-100 border border-slate-200">
+      <FiUsers size={26} className="text-slate-300" />
     </div>
-    <p style={{ color: "#6b7280" }} className="font-medium">No {label === "all" ? "" : label} entries found</p>
-    <p style={{ color: "#d1d5db" }} className="text-sm mt-1">Nothing to display here.</p>
+    <p className="font-medium text-slate-500">No {label === "all" ? "" : label} entries found</p>
+    <p className="text-sm mt-1 text-slate-300">Nothing to display here.</p>
   </div>
 );
 
