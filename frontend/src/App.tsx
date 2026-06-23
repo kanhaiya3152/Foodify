@@ -17,6 +17,7 @@ import Orders from "./pages/Orders";
 import OrderPage from "./pages/OrderPage";
 import RiderDashboard from "./pages/RiderDashboard";
 import Admin from "./pages/Admin";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   const { user, loading } = useAppData();
@@ -58,7 +59,7 @@ const App = () => {
               <Route path="/cart" element={<Cart />} />
               <Route path="/select-role" element={<SelectRole />} />
               <Route path="/account" element={<Account />} />
-              {/* <Route path="*" element = {pageNotFound}  /> */}
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
         </>
