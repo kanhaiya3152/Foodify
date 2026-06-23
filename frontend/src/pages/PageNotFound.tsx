@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const NotFound = () => {
+const PageNotFound = () => {
   const navigate = useNavigate();
 
   return (
@@ -13,20 +13,12 @@ const NotFound = () => {
           className="font-black leading-none"
           style={{
             fontSize: "clamp(8rem, 25vw, 18rem)",
-            color: "#f3f4f6",
+            color: "#111827",
             letterSpacing: "-0.05em",
           }}
         >
           404
         </p>
-
-        {/* Floating food emoji */}
-        <div
-          className="absolute inset-0 flex items-center justify-center"
-          style={{ fontSize: "clamp(3rem, 8vw, 6rem)" }}
-        >
-          🍕
-        </div>
       </div>
 
       {/* Heading */}
@@ -62,7 +54,7 @@ const NotFound = () => {
             ((e.currentTarget as HTMLButtonElement).style.background = "#6366f1")
           }
         >
-          🏠 Go to Home
+          Go to Home
         </button>
 
         <button
