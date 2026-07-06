@@ -1,12 +1,7 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { io, Socket } from "socket.io-client";
-import { useAppData } from "./AppContext";
+import { createContext, useContext } from "react";
+import { useAppStore } from "../store/useAppStore";
 import { realtimeService } from "../main";
 
 interface SocketContextType {
@@ -16,7 +11,9 @@ interface SocketContextType {
 const SocketContext = createContext<SocketContextType>({ socket: null });
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
-  const { isAuth } = useAppData();
+  // Granular selector — this component only re-renders when isAuth changes,
+  // not when user data, cart, or location changes.
+  const isAuth = useAppStore((s) => s.isAuth);
 
   const [socket, setSocket] = useState<Socket | null>(null);
 
@@ -50,7 +47,7 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       newSocket.disconnect();
     };
-  }, [isAuth]);
+  }, [isAuth, socket]);
 
   return (
     <SocketContext.Provider value={{ socket }}>

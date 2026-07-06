@@ -1,4 +1,4 @@
-import type React from "react";
+
 
 export interface User {
   _id: string;
@@ -18,9 +18,10 @@ export interface AppContextType {
   user: User | null;
   loading: boolean;
   isAuth: boolean;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  // Plain setters — compatible with Zustand (no React.Dispatch needed)
+  setUser: (user: User | null) => void;
+  setIsAuth: (val: boolean) => void;
+  setLoading: (val: boolean) => void;
   location: LocationData | null;
   loadingLocation: boolean;
   city: string;
