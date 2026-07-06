@@ -50,6 +50,13 @@ export const initSocket = (server: http.Server) => {
       socket.join(`restaurant:${user.restaurantId}`);
     }
 
+    // Admin users join a dedicated room to receive platform-level alerts
+    // e.g. "no rider found for order" after all retry attempts
+    if (user.role === "admin") {
+      socket.join("admin:notifications");
+      console.log(`Admin ${userId} joined admin:notifications room`);
+    }
+
     console.log(`User connected: ${userId}`);
     console.log("Socket room: ", [...socket.rooms]);
 

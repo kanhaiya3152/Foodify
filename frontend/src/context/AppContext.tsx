@@ -3,10 +3,6 @@ import { Toaster } from "react-hot-toast";
 import { useAppStore } from "../store/useAppStore";
 import type { AppContextType } from "../types";
 
-// ─── Provider ────────────────────────────────────────────────────────────────
-// No longer uses React Context at all.
-// Its only jobs are: run app-level effects on mount + render <Toaster />.
-
 interface AppProviderProps {
   children: ReactNode;
 }
@@ -22,7 +18,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     fetchUser();
     initLocation();
   }, []);
-   
+
   // When user changes (e.g. after login), load their cart
   useEffect(() => {
     if (user && user.role === "customer") {
@@ -38,10 +34,6 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   );
 };
 
-// ─── useAppData — backward-compatible adapter ─────────────────────────────
-// All 18 consumer files call useAppData() exactly as before.
-// Each field is a separate granular selector → zero wasted re-renders.
-// A component that only reads `user` will NOT re-render when `cart` changes.
 
 export const useAppData = (): AppContextType => {
   const user = useAppStore((s) => s.user);
