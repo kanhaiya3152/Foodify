@@ -4,7 +4,6 @@ import { adminService } from "../main";
 import AdminRestaurantCard from "../components/AdminRestaurantCard";
 import RiderAdmin from "../components/RiderAdmin";
 import { useAppData } from "../context/AppContext";
-import { useSocket } from "../context/SocketContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
@@ -13,8 +12,6 @@ import {
   FiCheckCircle,
   FiClock,
   FiGrid,
-  FiAlertTriangle,
-  FiX,
 } from "react-icons/fi";
 import { MdOutlineRestaurant, MdOutlineDirectionsBike } from "react-icons/md";
 
@@ -38,18 +35,8 @@ const ACCENT_CLASSES: Record<string, { bg: string; text: string }> = {
 
 const getAccentClasses = (accent: string) => ACCENT_CLASSES[accent] ?? { bg: "bg-slate-100", text: "text-slate-700" };
 
-// Shape of each unassigned-order alert
-interface UnassignedAlert {
-  id: string;          // orderId used as unique key
-  orderId: string;
-  restaurantId: string;
-  message: string;
-  timestamp: string;
-}
-
 const Admin = () => {
   const { setIsAuth, setUser, user } = useAppData();
-  const { socket } = useSocket();
   const [restaurants, setRestaurants] = useState<any[]>([]);
   const [riders, setRiders] = useState<any[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
@@ -57,8 +44,6 @@ const Admin = () => {
   const [tab, setTab] = useState<Tab>("dashboard");
   const [restaurantFilter, setRestaurantFilter] = useState<Filter>("all");
   const [riderFilter, setRiderFilter] = useState<Filter>("all");
-  // Alerts for orders with no rider found after all retries
-  const [unassignedAlerts, setUnassignedAlerts] = useState<UnassignedAlert[]>([]);
 
   const navigate = useNavigate();
 
@@ -135,26 +120,6 @@ const Admin = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  // Listen for "no rider found" alerts from the backend after all retries exhausted
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleNoRider = (payload: { orderId: string; restaurantId: string; message: string; timestamp: string }) => {
-      toast.error(`No rider found for order!`, { duration: 6000 });
-      setUnassignedAlerts((prev) => [
-        // Put newest alert at the top, avoid duplicates
-        { id: payload.orderId, ...payload },
-        ...prev.filter((a) => a.id !== payload.orderId),
-      ]);
-    };
-
-    socket.on("admin:no_rider_found", handleNoRider);
-
-    return () => {
-      socket.off("admin:no_rider_found", handleNoRider);
-    };
-  }, [socket]);
 
   const logoutHandler = () => {
     localStorage.removeItem("token");
@@ -283,39 +248,6 @@ const Admin = () => {
         </div>
 
         <div className="px-8 py-6">
-
-          {/* ══ UNASSIGNED ORDER ALERTS ══ */}
-          {unassignedAlerts.length > 0 && (
-            <div className="mb-5 space-y-2">
-              {unassignedAlerts.map((alert) => (
-                <div
-                  key={alert.id}
-                  className="flex items-start gap-3 px-4 py-3 rounded-xl border border-red-200 bg-red-50"
-                >
-                  <FiAlertTriangle size={18} className="text-red-500 mt-0.5 flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-red-700">
-                      Manual Assignment Required
-                    </p>
-                    <p className="text-xs text-red-500 mt-0.5">
-                      Order <span className="font-mono font-bold">{alert.orderId}</span> —
-                      no rider found within 2km after 3 attempts.
-                    </p>
-                  </div>
-                  <button
-                    onClick={() =>
-                      setUnassignedAlerts((prev) => prev.filter((a) => a.id !== alert.id))
-                    }
-                    title="Dismiss alert"
-                    aria-label="Dismiss alert"
-                    className="text-red-400 hover:text-red-600 cursor-pointer flex-shrink-0"
-                  >
-                    <FiX size={16} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
 
           {/* ══ DASHBOARD ══ */}
           {tab === "dashboard" && stats && (

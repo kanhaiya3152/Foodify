@@ -1,5 +1,5 @@
-import { useEffect, useState, type ReactNode } from "react";
-import { io, Socket } from "socket.io-client";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { io, type Socket } from "socket.io-client";
 import { createContext, useContext } from "react";
 import { useAppStore } from "../store/useAppStore";
 import { realtimeService } from "../main";
@@ -11,46 +11,66 @@ interface SocketContextType {
 const SocketContext = createContext<SocketContextType>({ socket: null });
 
 export const SocketProvider = ({ children }: { children: ReactNode }) => {
-  // Granular selector — this component only re-renders when isAuth changes,
-  // not when user data, cart, or location changes.
+  // Granular selector — only re-renders this component when isAuth changes
   const isAuth = useAppStore((s) => s.isAuth);
 
-  const [socket, setSocket] = useState<Socket | null>(null);
+  // Use a ref for the socket instance so connect/disconnect events
+  // don't trigger unnecessary re-renders of this provider
+  const socketRef = useRef<Socket | null>(null);
+
+  // Only used to notify consumers (via context) when the socket changes
+  const [socketInstance, setSocketInstance] = useState<Socket | null>(null);
 
   useEffect(() => {
+    // Not authenticated — clean up any existing socket
     if (!isAuth) {
-      socket?.disconnect();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+      Promise.resolve().then(() => setSocketInstance(null));
       return;
     }
 
-    const newSocket = io(realtimeService, {
+    // Already have an active socket from a previous render
+    if (socketRef.current?.connected) return;
+
+    const socket = io(realtimeService, {
       auth: {
         token: localStorage.getItem("token"),
       },
       transports: ["websocket"],
+      // Reconnect up to 5 times before giving up
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
     });
 
-    newSocket.on("connect", () => {
-      console.log("Socket Connected", newSocket.id);
-      setSocket(newSocket);
+    socketRef.current = socket;
+
+    socket.on("connect", () => {
+      console.log("Socket Connected:", socket.id);
+      setSocketInstance(socket); // notify consumers that socket is ready
     });
 
-    newSocket.on("disconnect", () => {
-      console.log("Socket Disconnected");
-      setSocket(null);
+    socket.on("disconnect", (reason) => {
+      console.log("Socket Disconnected:", reason);
+      // Don't call setSocketInstance(null) here — it causes a re-render
+      // which can restart the effect chain. Let reconnection handle it.
     });
 
-    newSocket.on("connect_error", (err) => {
+    socket.on("connect_error", (err) => {
       console.log("Socket Error:", err.message);
     });
 
+    // Cleanup: disconnect when isAuth changes or component unmounts
     return () => {
-      newSocket.disconnect();
+      socket.disconnect();
+      socketRef.current = null;
     };
-  }, [isAuth, socket]);
+  }, [isAuth]);
 
   return (
-    <SocketContext.Provider value={{ socket }}>
+    <SocketContext.Provider value={{ socket: socketInstance }}>
       {children}
     </SocketContext.Provider>
   );

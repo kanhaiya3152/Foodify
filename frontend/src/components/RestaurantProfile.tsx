@@ -78,7 +78,7 @@ const RestaurantProfile = ({ restaurant, isSeller, onUpdate }: props) => {
     localStorage.setItem("token", "");
     setIsAuth(false);
     setUser(null);
-    toast.success("loggedOut successfully");
+    toast.success("logout successfully");
   };
   return (
     <div className="mx-auto max-w-xl rounded-xl bg-white shadow-sm overflow-hidden">

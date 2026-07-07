@@ -41,26 +41,26 @@ const OrderPage = () => {
       fetchOrder();
     };
 
+    const onReconnect = () => {
+      fetchOrder();
+    };
+
     socket.on("order:update", onOrderUpdate);
     socket.on("order:rider_assigned", onOrderUpdate);
+    socket.on("connect", onReconnect);
 
     return () => {
       socket.off("order:update", onOrderUpdate);
       socket.off("order:rider_assigned", onOrderUpdate);
+      socket.off("connect", onReconnect);
     };
   }, [socket]);
 
-  useEffect(() => {
-    if (!socket || !id) return;
+  // Note: user is already joined to room user:${userId} from socket handshake
 
-    socket.emit("join", `user:${id}`);
-
-    return () => {
-      socket.emit("leave", `user:${id}`);
-    };
-  }, [socket, id]);
-
-  const [riderLocation, setRiderLocation] = useState<[number, number] | null>(null);
+  const [riderLocation, setRiderLocation] = useState<[number, number] | null>(
+    null
+  );
 
   useEffect(() => {
     if (!socket) return;

@@ -98,12 +98,21 @@ const RestaurantOrders = ({ restaurantId }: { restaurantId: string }) => {
       fetchOrders();
     };
 
+    const onReconnect = () => {
+      fetchOrders();
+    };
+
+    socket.on("order:update", onUpdateOrder);
     socket.on("order:rider_assigned", onUpdateOrder);
+    socket.on("connect", onReconnect);
 
     return () => {
+      socket.off("order:update", onUpdateOrder);
       socket.off("order:rider_assigned", onUpdateOrder);
+      socket.off("connect", onReconnect);
     };
   }, [socket]);
+
 
   if (loading) {
     return <p className="text-gray-500">Loading Orders</p>;

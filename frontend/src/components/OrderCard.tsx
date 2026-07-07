@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { IOrder } from "../types";
-import { ORDER_ACTIONS } from "../utils/Orderflow";
+import { ORDER_ACTIONS } from "../utils/Orderflow"
 import axios from "axios";
 import { restaurantService } from "../main";
 import toast from "react-hot-toast";
@@ -32,6 +32,7 @@ const statusColor = (status: string) => {
 const OrderCard = ({ order, onStatusUpdate }: props) => {
   const [loading, setLoading] = useState(false);
   const [retryVisible, setRetryVisible] = useState(false);
+  const [retryTrigger, setRetryTrigger] = useState(0);
 
   const actions = ORDER_ACTIONS[order.status] || [];
 
@@ -41,12 +42,14 @@ const OrderCard = ({ order, onStatusUpdate }: props) => {
       return;
     }
 
+    setRetryVisible(false);
     const timer = setTimeout(() => {
       setRetryVisible(true);
     }, 10000);
 
     return () => clearTimeout(timer);
-  }, [order.status]);
+  }, [order.status, order.updatedAt, retryTrigger]);
+
 
   const updateStatus = async (status: string) => {
     try {
@@ -68,12 +71,14 @@ const OrderCard = ({ order, onStatusUpdate }: props) => {
       toast.error(error.response.data.message);
     } finally {
       setLoading(false);
+      setRetryTrigger((prev) => prev + 1);
     }
   };
+
   return (
     <div className="rounded-xl bg-white p-4 shadow-sm space-y-3">
       <div className="flex justify-between items-center">
-         <p className="text-sm font-medium">Order #{order._id.slice(-6)}</p> {/* It is the Order_id which shows by rider to take the order from restro */}
+        <p className="text-sm font-medium">Order #{order._id.slice(-6)}</p>
 
         <span
           className={`rounded-full px-3 py-1 text-xs font-medium ${statusColor(

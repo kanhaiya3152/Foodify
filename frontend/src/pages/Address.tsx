@@ -12,7 +12,7 @@ import { restaurantService } from "../main";
 import L from "leaflet";
 import { LuLocateFixed } from "react-icons/lu";
 import { BiLoader, BiPlus, BiTrash } from "react-icons/bi";
-// 🔧 Fix leaflet marker icon issue
+// Fix leaflet marker icon issue
 
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -27,7 +27,7 @@ interface Address {
   formattedAddress: string;
   mobile: number;
 }
-// 📍 Click-to-select location
+// Click-to-select location
 const LocationPicker = ({
   setLocation,
 }: {
@@ -40,7 +40,7 @@ const LocationPicker = ({
   });
   return null;
 };
-// 🎯 Locate me button
+// Locate me button
 const LocateMeButton = ({
   onLocate,
 }: {
@@ -78,12 +78,12 @@ const AddAddressPage = () => {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  // 📋 Form state
+  // Form state
   const [mobile, setMobile] = useState("");
   const [formattedAddress, setFormattedAddress] = useState("");
   const [latitude, setLatitude] = useState<number | null>(null);
   const [longitude, setLongitude] = useState<number | null>(null);
-  // 🌍 Reverse geocoding
+  // Reverse geocoding
   const fetchFormattedAddress = async (lat: number, lng: number) => {
     try {
       const res = await fetch(
@@ -100,7 +100,7 @@ const AddAddressPage = () => {
     setLongitude(lng);
     fetchFormattedAddress(lat, lng);
   };
-  // 📡 Fetch addresses
+  // Fetch addresses
   const fetchAddresses = async () => {
     try {
       const { data } = await axios.get(`${restaurantService}/api/address/all`, {
@@ -118,7 +118,7 @@ const AddAddressPage = () => {
   useEffect(() => {
     fetchAddresses();
   }, []);
-  // ➕ Add address
+  //  Add address
   const addAddress = async () => {
     if (
       !mobile ||

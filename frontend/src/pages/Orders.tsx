@@ -50,14 +50,21 @@ const Orders = () => {
       fetchOrders();
     };
 
+    const onReconnect = () => {
+      fetchOrders();
+    };
+
     socket.on("order:update", onOrderUpdate);
     socket.on("order:rider_assigned", onOrderUpdate);
+    socket.on("connect", onReconnect);
 
     return () => {
       socket.off("order:update", onOrderUpdate);
       socket.off("order:rider_assigned", onOrderUpdate);
+      socket.off("connect", onReconnect);
     };
   }, [socket]);
+
 
   if (loading) {
     return <p className="text-center text-gray-500">Loading orders...</p>;
