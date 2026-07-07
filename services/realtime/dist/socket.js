@@ -21,7 +21,7 @@ export const initSocket = (server) => {
             next();
         }
         catch (error) {
-            console.log("❌ Socket auth failed: ", error);
+            console.log("Socket auth failed: ", error);
             next(new Error("Unauthorized"));
         }
     });

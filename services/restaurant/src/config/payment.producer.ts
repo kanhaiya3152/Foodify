@@ -18,7 +18,7 @@ export const startPaymentConsumer = async () => {
 
       const { orderId } = event.data;
 
-      const order = await Order.findByIdAndUpdate(
+      const order = await Order.findOneAndUpdate(
         {
           _id: orderId,
           paymentStatus: { $ne: "paid" },
@@ -32,16 +32,18 @@ export const startPaymentConsumer = async () => {
             expiresAt: 1,
           },
         },
-        { new: true },
+        { new: true }
       );
 
       if (!order) {
         channel.ack(msg);
         return;
       }
-      console.log("✅Order Placed", order._id);
 
-      // socket ka kam
+      console.log("✅Order Placed:", order._id);
+
+      //   socket work
+
       await axios.post(
         `${process.env.REALTIME_SERVICE}/api/v1/internal/emit`,
         {
@@ -49,18 +51,17 @@ export const startPaymentConsumer = async () => {
           room: `restaurant:${order.restaurantId}`,
           payload: {
             orderId: order._id,
-            status: order.status,
           },
         },
         {
           headers: {
             "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
           },
-        },
+        }
       );
       channel.ack(msg);
     } catch (error) {
-      console.error("Payment Consumer error: ", error);
+      console.error("Payment consumer error:", error);
     }
   });
 };

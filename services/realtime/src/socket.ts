@@ -29,7 +29,7 @@ export const initSocket = (server: http.Server) => {
 
       next();
     } catch (error) {
-      console.log("❌ Socket auth failed: ", error);
+      console.log("Socket auth failed: ", error);
       next(new Error("Unauthorized"));
     }
   });
@@ -48,13 +48,6 @@ export const initSocket = (server: http.Server) => {
 
     if (user.restaurantId) {
       socket.join(`restaurant:${user.restaurantId}`);
-    }
-
-    // Admin users join a dedicated room to receive platform-level alerts
-    // e.g. "no rider found for order" after all retry attempts
-    if (user.role === "admin") {
-      socket.join("admin:notifications");
-      console.log(`Admin ${userId} joined admin:notifications room`);
     }
 
     console.log(`User connected: ${userId}`);

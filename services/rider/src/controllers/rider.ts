@@ -42,7 +42,7 @@ export const addRiderProfile = TryCatch(
         buffer: fileBuffer.content,
       }
     );
-    
+
     const {
       phoneNumber,
       aadharNumber,
@@ -167,7 +167,7 @@ export const toggleRiderAvailablity = TryCatch(
     await rider.save();
 
     res.json({
-      message: isAvailble ? "Rider is Online" : "Rider is Offline",
+      message: isAvailble ? "Rider is now online" : "Rider is now offline",
       rider,
     });
   }
@@ -186,7 +186,7 @@ export const acceptOrder = TryCatch(async (req: AuthenticatedRequest, res) => {
   const rider = await Rider.findOne({ userId: riderUserId, isAvailble: true });
 
   if (!rider) {
-    return res.status(404).json({ message: "Rider not found" });
+    return res.status(404).json({ message: "rider not found" });
   }
 
   try {
@@ -264,6 +264,45 @@ export const fetchMyCurrentOrder = TryCatch(
     }
   }
 );
+
+export const fetchMyOrderHistory = TryCatch(
+  async (req: AuthenticatedRequest, res) => {
+    const riderUserId = req.user?._id;
+
+    if (!riderUserId) {
+      return res.status(400).json({
+        message: "Please Login",
+      });
+    }
+
+    const rider = await Rider.findOne({
+      userId: riderUserId,
+    });
+
+    if (!rider) {
+      return res.status(404).json({ message: "rider not found" });
+    }
+
+    try {
+      const { data } = await axios.get(
+        `${process.env.RESTAURANT_SERVICE}/api/order/history/rider?riderId=${rider._id}`,
+        {
+          headers: {
+            "x-internal-key": process.env.INTERNAL_SERVICE_KEY,
+          },
+        }
+      );
+
+      res.json(data);
+    } catch (error: any) {
+      res.status(500).json({
+        message:
+          error.response?.data?.message || "Failed to fetch order history",
+      });
+    }
+  }
+);
+
 
 export const updateOrderStatus = TryCatch(
   async (req: AuthenticatedRequest, res) => {

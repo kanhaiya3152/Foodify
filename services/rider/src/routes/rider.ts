@@ -1,6 +1,6 @@
 import express from "express";
 import { isAuth } from "../middlewares/isAuth.js";
-import { acceptOrder, addRiderProfile, fetchMyCurrentOrder, fetchMyProfile, toggleRiderAvailablity, updateOrderStatus } from "../controllers/rider.js";
+import { acceptOrder, addRiderProfile, fetchMyCurrentOrder, fetchMyOrderHistory, fetchMyProfile, toggleRiderAvailablity, updateOrderStatus } from "../controllers/rider.js";
 import uploadFile from "../middlewares/multer.js";
 
 const router  = express.Router();
@@ -10,6 +10,7 @@ router.patch("/toggle", isAuth, toggleRiderAvailablity);
 router.post("/new", isAuth, uploadFile, addRiderProfile);
 router.post("/accept/:orderId", isAuth, acceptOrder);
 router.get("/order/current", isAuth, fetchMyCurrentOrder);
+router.get("/order/history", isAuth, fetchMyOrderHistory);
 router.put("/order/update/:orderId", isAuth, updateOrderStatus);
 
 export default router;
