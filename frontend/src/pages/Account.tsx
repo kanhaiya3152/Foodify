@@ -11,11 +11,11 @@ const Account = () => {
   const navigate = useNavigate();
 
   const logoutHandler = () => {
-    localStorage.setItem("token", "");
+    localStorage.removeItem("token");
     setUser(null);
     setIsAuth(false);
-    navigate("/login");
     toast.success("Logout Successfully");
+    navigate("/login");
   };
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-6">
