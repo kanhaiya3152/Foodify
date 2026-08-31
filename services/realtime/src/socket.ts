@@ -5,12 +5,13 @@ import jwt from "jsonwebtoken";
 let io: Server;
 
 export const initSocket = (server: http.Server) => {
-  io = new Server(server, {
+  io = new Server(server, { // this part is responsible for initialise socket.io and allow all type of origins 
     cors: {
       origin: "*",
     },
   });
 
+  // this func basically check that user is valid or not
   io.use((socket, next) => {
     try {
       const token = socket.handshake.auth?.token;
@@ -34,6 +35,7 @@ export const initSocket = (server: http.Server) => {
     }
   });
 
+  // this makes connection and creating rooms for user using join
   io.on("connection", (socket) => {
     const user = socket.data.user;
 

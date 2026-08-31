@@ -224,7 +224,7 @@ export const fetchRestaurantOrders = TryCatch(
   }
 );
 
-const ALLOWED_STATUSES = ["accepted", "preparing", "ready_for_rider"] as const;
+const ALLOWED_STATUSES = ["accepted", "preparing", "ready_for_rider"] as const; 
 
 export const updateOrderStatus = TryCatch(
   async (req: AuthenticatedRequest, res) => {
